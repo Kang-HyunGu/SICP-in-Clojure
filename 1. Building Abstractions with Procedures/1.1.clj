@@ -231,3 +231,16 @@ circumference
       (- 6 2)
       (- 2 7)))
 ;-37/150
+
+;Exercise 1.3. Define a procedure that takes three numbers as arguments and returns the sum of the squares of the two larger numbers.
+(defn sum-of-squares-two-larger-numbers [x y z]
+  (cond (or (<= z y x) (<= z x y)) (sum-of-squares x y)
+        (or (<= x z y) (<= x y z)) (sum-of-squares y z)
+        (or (<= y x z) (<= y z x)) (sum-of-squares z x)))
+
+(= (sum-of-squares-two-larger-numbers 1 1 1) (sum-of-squares 1 1))
+(= (sum-of-squares-two-larger-numbers 1 1 2) (sum-of-squares 1 2))
+(= (sum-of-squares-two-larger-numbers 1 2 3) (sum-of-squares 2 3))
+(= (sum-of-squares-two-larger-numbers 1 3 2) (sum-of-squares 2 3))
+(= (sum-of-squares-two-larger-numbers 3 2 1) (sum-of-squares 2 3))
+(= (sum-of-squares-two-larger-numbers 2 1 3) (sum-of-squares 2 3))
