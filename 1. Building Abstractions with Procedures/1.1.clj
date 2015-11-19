@@ -244,3 +244,45 @@ circumference
 (= (sum-of-squares-two-larger-numbers 1 3 2) (sum-of-squares 2 3))
 (= (sum-of-squares-two-larger-numbers 3 2 1) (sum-of-squares 2 3))
 (= (sum-of-squares-two-larger-numbers 2 1 3) (sum-of-squares 2 3))
+
+;Exercise 1.4
+;special form, special symbol과 procedure의 차이는 무엇인가?
+;왜 and, or는 special form이고, not은 procedure인가?
+;combination엮은식이라 부르는이유? expression표현식이랑 다른가? 같다. 표현이 다를뿐
+;compound expression => primitive symbol을 여러번 사용하여 나타내는 복잡한식은?
+(defn a-plus-abs-b [a b]
+  ((if (> b 0) + -) a b))
+;applicative-order evaluation(인자먼저계산법)
+
+(a-plus-abs-b 3 -1)   ;4
+(a-plus-abs-b 999 -1) ;1000
+(a-plus-abs-b 0 1)    ;1
+
+;Exercise 1.5
+(defn p [] (p))
+
+(defn test [x y]
+  (if (= x 0)
+      0
+      y))
+
+(test 3 3)   ;3
+(test 0 (p)) ;StackOverflowError
+;Clojure는 applicative-order evaluation을 하기 때문에 y->(p)에서 끝없이 반복된다.
+;normal-order evaluation일 경우 y를 (p)로 둔 상태에서 (= x 0) 조건에 걸려 계산이 끝난다.
+
+;1.1.7
+;Newton method
+;x의 제곱근에 가까운 값 y가 있을 때 y와 x/y의 평균을 구하여 진짜 제곱근에 더 가까운 값을 구하는 방법
+(defn sqrt-iter [guess x]
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(defn improve [guess x]
+  (average guess (/ x guess)))
+
+(defn average [x y]
+  (/ (+ x y) 2))
+
