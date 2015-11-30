@@ -252,6 +252,7 @@ circumference
 ;compound expression => primitive symbol을 여러번 사용하여 나타내는 복잡한식은?
 (defn a-plus-abs-b [a b]
   ((if (> b 0) + -) a b))
+;#'sicp/a-plus-abs-b
 ;applicative-order evaluation(인자먼저계산법)
 
 (a-plus-abs-b 3 -1)   ;4
@@ -260,11 +261,13 @@ circumference
 
 ;Exercise 1.5
 (defn p [] (p))
+;#'sicp/p
 
 (defn test [x y]
   (if (= x 0)
       0
       y))
+;#'sicp/test
 
 (test 3 3)   ;3
 (test 0 (p)) ;StackOverflowError
@@ -279,10 +282,58 @@ circumference
       guess
       (sqrt-iter (improve guess x)
                  x)))
+;#'sicp/sqrt-iter
 
 (defn improve [guess x]
   (average guess (/ x guess)))
+;#'sicp/improve
 
 (defn average [x y]
   (/ (+ x y) 2))
+;#'sicp/average
 
+(def predetermined-tolerance 0.001)
+;#'sicp/predetermined-tolerance
+
+(defn good-enough? [guess x]
+  (< (abs (- (square guess) x)) predetermined-tolerance))
+;#'sicp/good-enough?
+
+(defn sqrt [x]
+  (sqrt-iter 1.0 x))
+;#'sicp/sqrt
+
+(sqrt 9)
+;3.00009155413138
+
+(sqrt (+ 100 37))
+;11.704699917758145
+
+(sqrt (+ (sqrt 2) (sqrt 3)))
+;1.7739279023207892
+
+(square (sqrt 1000))
+;1000.000369924366
+
+;Exercise 1.6
+(defn new-if [predicate then-clause else-clause]
+  (cond predicate then-clause
+        :else     else-clause))
+;#'sicp/new-if
+
+(new-if (= 2 3) 0 5)
+;5
+
+(new-if (= 1 1) 0 5)
+;0
+
+(defn new-if-sqrt-iter [guess x]
+  (new-if (good-enough? guess x)
+          guess
+          (new-if-sqrt-iter (improve guess x)
+                     x)))
+;#'sicp/sqrt-iter
+
+(new-if-sqrt-iter 1.0 3)
+;StackOverflowError 발생. p22 Lisp 실행기는 applicative-order evaluation을 쓴다.
+;그러므로, new-if의 인자인 else-clause의 값을 구하려다가 무한에 빠진다.
